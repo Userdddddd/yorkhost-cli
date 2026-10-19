@@ -55,7 +55,7 @@ irm https://raw.githubusercontent.com/YorkHost-fr/yorkhost-cli/main/scripts/inst
 **Paquets Debian/Ubuntu, Fedora/RHEL, Alpine** : `.deb`, `.rpm` et `.apk` sur la
 [page des releases](https://github.com/YorkHost-fr/yorkhost-cli/releases/latest) (autocomplétion et pages `man` incluses).
 
-**Avec Go 1.24+**
+**Avec Go 1.26+**
 
 ```sh
 go install github.com/YorkHost-fr/yorkhost-cli/cmd/yorkhost@latest

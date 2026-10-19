@@ -11,7 +11,7 @@ make build          # → bin/yorkhost
 make test           # tests unitaires + bout en bout contre un faux serveur API
 ```
 
-Prérequis : Go 1.24+. Optionnel : [golangci-lint](https://golangci-lint.run/) et
+Prérequis : Go 1.26+. Optionnel : [golangci-lint](https://golangci-lint.run/) et
 [GoReleaser](https://goreleaser.com/) (`make snapshot`).
 
 Essayer contre l'API réelle sans toucher à votre configuration :

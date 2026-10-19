@@ -13,6 +13,7 @@ linters:
         - G304 # lecture de fichiers choisis par l'utilisateur : voulu
         - G301 # dossier docs/ généré en 0755 : voulu
         - G306 # fichiers téléchargés par l'utilisateur en 0644 (pas de secret) : voulu
+        - G703 # gen-docs écrit dans le dossier passé par le mainteneur : voulu
   exclusions:
     presets:
       - std-error-handling

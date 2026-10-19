@@ -53,7 +53,7 @@ Les paquets installent aussi l'autocomplétion bash, zsh et fish, et les pages `
 go install github.com/YorkHost-fr/yorkhost-cli/cmd/yorkhost@latest
 ```
 
-Go 1.24 ou plus récent. Le binaire est placé dans `$(go env GOPATH)/bin`.
+Go 1.26 ou plus récent. Le binaire est placé dans `$(go env GOPATH)/bin`.
 
 ## Archive manuelle
 
