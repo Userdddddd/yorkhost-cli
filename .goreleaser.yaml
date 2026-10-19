@@ -1,0 +1,122 @@
+# GoReleaser : binaires, archives, paquets deb/rpm/apk et sommes de contrôle,
+# publiés sur la release GitHub à chaque tag v*. Voir docs/releasing.md.
+version: 2
+project_name: yorkhost
+
+before:
+  hooks:
+    - go mod tidy
+    - sh -c "rm -rf completions manpages && mkdir -p completions manpages"
+    - sh -c "go run ./cmd/yorkhost completion bash > completions/yorkhost.bash"
+    - sh -c "go run ./cmd/yorkhost completion zsh > completions/_yorkhost"
+    - sh -c "go run ./cmd/yorkhost completion fish > completions/yorkhost.fish"
+    - sh -c "go run ./cmd/yorkhost completion powershell > completions/yorkhost.ps1"
+    - go run ./cmd/yorkhost gen-docs --format man manpages
+
+builds:
+  - id: yorkhost
+    main: ./cmd/yorkhost
+    binary: yorkhost
+    env:
+      - CGO_ENABLED=0
+    flags:
+      - -trimpath
+    ldflags:
+      - -s -w
+      - -X github.com/YorkHost-fr/yorkhost-cli/internal/version.Version={{ .Version }}
+      - -X github.com/YorkHost-fr/yorkhost-cli/internal/version.Commit={{ .ShortCommit }}
+      - -X github.com/YorkHost-fr/yorkhost-cli/internal/version.Date={{ .CommitDate }}
+    mod_timestamp: "{{ .CommitTimestamp }}"
+    goos: [linux, darwin, windows, freebsd]
+    goarch: [amd64, arm64, arm]
+    goarm: ["7"]
+    ignore:
+      - goos: darwin
+        goarch: arm
+      - goos: windows
+        goarch: arm
+      - goos: freebsd
+        goarch: arm
+
+archives:
+  - id: default
+    formats: [tar.gz]
+    format_overrides:
+      - goos: windows
+        formats: [zip]
+    name_template: >-
+      {{ .ProjectName }}_{{ .Version }}_{{ .Os }}_{{ if eq .Arch "amd64" }}x86_64{{ else if eq .Arch "arm" }}armv{{ .Arm }}{{ else }}{{ .Arch }}{{ end }}
+    files:
+      - README.md
+      - LICENSE
+      - CHANGELOG.md
+      - completions/*
+      - manpages/*
+
+nfpms:
+  - id: packages
+    package_name: yorkhost
+    file_name_template: >-
+      {{ .PackageName }}_{{ .Version }}_{{ .Os }}_{{ if eq .Arch "arm" }}armv{{ .Arm }}{{ else }}{{ .Arch }}{{ end }}
+    vendor: YorkHost
+    homepage: https://yorkhost.fr
+    maintainer: YorkHost <support@yorkhost.fr>
+    description: CLI officiel YorkHost — VPS, serveurs de jeu, facturation, support et sandboxes depuis le terminal.
+    license: MIT
+    formats: [deb, rpm, apk]
+    bindir: /usr/bin
+    section: utils
+    contents:
+      - src: ./completions/yorkhost.bash
+        dst: /usr/share/bash-completion/completions/yorkhost
+        file_info: { mode: 0644 }
+      - src: ./completions/_yorkhost
+        dst: /usr/share/zsh/site-functions/_yorkhost
+        file_info: { mode: 0644 }
+      - src: ./completions/yorkhost.fish
+        dst: /usr/share/fish/vendor_completions.d/yorkhost.fish
+        file_info: { mode: 0644 }
+      - src: ./manpages/*.1
+        dst: /usr/share/man/man1/
+        file_info: { mode: 0644 }
+
+checksum:
+  name_template: checksums.txt
+  algorithm: sha256
+
+snapshot:
+  version_template: "{{ incpatch .Version }}-next"
+
+changelog:
+  sort: asc
+  use: github
+  filters:
+    exclude:
+      - "^docs:"
+      - "^test:"
+      - "^chore:"
+      - "^ci:"
+  groups:
+    - title: Nouveautés
+      regexp: '^.*?feat(\(.+\))??!?:.+$'
+      order: 0
+    - title: Corrections
+      regexp: '^.*?fix(\(.+\))??!?:.+$'
+      order: 1
+    - title: Autres changements
+      order: 999
+
+release:
+  github:
+    owner: YorkHost-fr
+    name: yorkhost-cli
+  draft: false
+  prerelease: auto
+  footer: |
+    ## Installation
+
+    ```sh
+    curl -fsSL https://raw.githubusercontent.com/YorkHost-fr/yorkhost-cli/main/scripts/install.sh | sh
+    ```
+
+    Autres méthodes (deb, rpm, apk, Windows, `go install`) : [docs/installation.md](https://github.com/YorkHost-fr/yorkhost-cli/blob/main/docs/installation.md).

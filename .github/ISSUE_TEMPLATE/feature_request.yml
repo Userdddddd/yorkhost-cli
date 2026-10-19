@@ -1,0 +1,17 @@
+name: Idée / amélioration
+description: Une commande ou une option qui vous manque
+labels: [enhancement]
+body:
+  - type: textarea
+    id: need
+    attributes:
+      label: Besoin
+      description: Ce que vous voulez faire, et pourquoi.
+    validations:
+      required: true
+  - type: textarea
+    id: proposal
+    attributes:
+      label: Commande imaginée
+      render: shell
+      placeholder: yorkhost vps snapshot create 1234 --name avant-maj

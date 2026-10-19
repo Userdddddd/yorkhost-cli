@@ -1,0 +1,21 @@
+# Binaires et artefacts
+/bin/
+/dist/
+/completions/
+/manpages/
+/yorkhost
+*.exe
+
+# Tests
+*.out
+coverage.*
+
+# Éditeurs / OS
+.idea/
+.vscode/
+*.swp
+.DS_Store
+
+# Ne jamais versionner une configuration locale (contient des secrets)
+config.yaml
+.env

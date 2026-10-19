@@ -1,0 +1,8 @@
+blank_issues_enabled: false
+contact_links:
+  - name: Support YorkHost (compte, services, facturation)
+    url: https://clients.yorkhost.fr/
+    about: Pour un problème sur un service ou une facture, ouvrez un ticket depuis l'espace client ou avec `yorkhost ticket create`.
+  - name: Faille de sécurité
+    url: https://github.com/YorkHost-fr/yorkhost-cli/security/advisories/new
+    about: Signalement privé, voir SECURITY.md.

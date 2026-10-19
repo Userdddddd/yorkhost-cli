@@ -1,0 +1,25 @@
+version: "2"
+linters:
+  enable:
+    - errorlint
+    - gosec
+    - unconvert
+    - unparam
+  settings:
+    gosec:
+      excludes:
+        - G104 # erreurs ignorées volontairement (meilleur effort, signalées par errcheck)
+        - G204 # exec de ssh / du navigateur avec des arguments construits : voulu
+        - G304 # lecture de fichiers choisis par l'utilisateur : voulu
+        - G301 # dossier docs/ généré en 0755 : voulu
+        - G306 # fichiers téléchargés par l'utilisateur en 0644 (pas de secret) : voulu
+  exclusions:
+    presets:
+      - std-error-handling
+      - common-false-positives
+    rules:
+      - path: _test\.go
+        linters: [gosec, errcheck, unparam]
+formatters:
+  enable:
+    - gofmt
