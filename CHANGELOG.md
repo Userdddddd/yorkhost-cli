@@ -5,6 +5,8 @@ versions : [SemVer](https://semver.org/lang/fr/).
 
 ## [Non publié]
 
+## [0.1.0] - 2026-10-19
+
 ### Ajouté
 
 - Première version du CLI `yorkhost`, client de l'API client YorkHost (`/client/v1`).
@@ -22,3 +24,6 @@ versions : [SemVer](https://semver.org/lang/fr/).
 - Sorties `table`, `wide`, `json`, `yaml` ; codes de sortie documentés.
 - Releases GoReleaser (Linux, macOS, Windows, FreeBSD ; deb, rpm, apk), scripts d'installation
   avec vérification SHA-256.
+
+[Non publié]: https://github.com/YorkHost-fr/yorkhost-cli/compare/v0.1.0...HEAD
+[0.1.0]: https://github.com/YorkHost-fr/yorkhost-cli/releases/tag/v0.1.0
