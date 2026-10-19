@@ -20,6 +20,9 @@ Une commande ou une option retirée, un format de sortie ou un code de sortie mo
    git push origin v1.0.0
    ```
 
+   Ou, sans tag local : *Actions → Release → Run workflow*, avec la version (`v1.0.0`).
+   Le workflow crée le tag sur `main` puis publie.
+
 Le workflow [`release.yml`](../.github/workflows/release.yml) lance les tests puis GoReleaser,
 qui publie sur la release GitHub :
 

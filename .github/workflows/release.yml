@@ -1,11 +1,25 @@
 name: Release
 
+# Deux façons de publier :
+#   - pousser un tag : git tag -a v1.2.3 -m v1.2.3 && git push origin v1.2.3
+#   - Actions → Release → Run workflow, avec la version : le workflow crée le
+#     tag sur le commit choisi (main par défaut) puis publie.
 on:
   push:
     tags: ["v*"]
+  workflow_dispatch:
+    inputs:
+      version:
+        description: "Version à publier (ex. v0.1.0)"
+        required: true
+        type: string
 
 permissions:
   contents: write
+
+concurrency:
+  group: release
+  cancel-in-progress: false
 
 jobs:
   release:
@@ -19,6 +33,23 @@ jobs:
           go-version-file: go.mod
       - name: Tests
         run: go test -count=1 ./...
+      - name: Créer le tag (déclenchement manuel)
+        if: github.event_name == 'workflow_dispatch'
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          if ! printf '%s' "$VERSION" | grep -Eq '^v[0-9]+\.[0-9]+\.[0-9]+(-[0-9A-Za-z.-]+)?$'; then
+            echo "Version invalide : $VERSION (attendu vMAJEUR.MINEUR.CORRECTIF)" >&2
+            exit 1
+          fi
+          if git rev-parse -q --verify "refs/tags/$VERSION" >/dev/null; then
+            echo "Le tag $VERSION existe déjà" >&2
+            exit 1
+          fi
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git tag -a "$VERSION" -m "$VERSION"
+          git push origin "refs/tags/$VERSION"
       - uses: goreleaser/goreleaser-action@v6
         with:
           version: "~> v2"
